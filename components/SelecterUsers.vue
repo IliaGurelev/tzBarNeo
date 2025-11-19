@@ -1,12 +1,16 @@
 <template>
   <div class="selector">
     <label for="user-select">Фильтр по пользователю</label>
-    <select id="user-select" @change="handlerSelect">
-      <option :value="''">--Пусто</option>
+    <select
+      id="user-select"
+      :value="stringValue"
+      @change="handlerSelect"
+    >
+      <option value="null">--Пусто</option>
       <option
         v-for="user in props.users"
         :key="user.id"
-        :value="user.id"
+        :value="String(user.id)"
       >
         {{ user.name }}
       </option>
@@ -16,22 +20,28 @@
 
 <script setup>
 const props = defineProps({
-  users: {
-    type: Array,
-    required: true,
-    default: []
+  users: Array,
+  currentUser: {
+    type: Number,
+    default: null
   }
 })
 
-const emit = defineEmits(['selected-user'])
+const emit = defineEmits(["selected-user"])
+
+const stringValue = computed(() =>
+  props.currentUser === null ? "null" : String(props.currentUser)
+)
 
 const handlerSelect = (event) => {
-  const value = event.target.value  
-  const userId = value === '' ? null : Number(value)
+  const value = event.target.value
+  const userId = value === "null" ? null : Number(value)
 
-  emit('selected-user', userId)
+  emit("selected-user", userId)
 }
 </script>
+
+
 
 <style lang="scss" scoped>
 .selector {

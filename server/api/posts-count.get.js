@@ -2,12 +2,13 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   const userId = query.userId
 
-  let url = 'https://jsonplaceholder.typicode.com/posts'
-  if (userId) url += `?userId=${userId}`
+  let total = 100
+  if (userId) {
+    total = 0
+  } 
 
   try {
-    const posts = await $fetch(url)
-    return posts.length
+    return total
   } catch (err) {
     console.error('Error:', err)
     return 0

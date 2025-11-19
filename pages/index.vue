@@ -2,7 +2,11 @@
   <div class="main-wrap">
     <Loader v-if="isLoading" class="loading" />
     <main class="main" v-else >
-      <SelecterUsers @selected-user="seletcedUser" :users="users" />
+      <SelecterUsers 
+        @selected-user="seletcedUser" 
+        :users="users" 
+        :current-user="currentUserId"
+      />
       <ul class="list-posts">
         <li 
           v-for="post in posts" 

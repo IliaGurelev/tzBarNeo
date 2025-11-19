@@ -43,9 +43,8 @@ export default () => createStore({
 
     async fetchUsers({ commit }) {
       commit('setLoading', true)
-      if (process.server) return 
       try {
-        const users = await fetch('https://jsonplaceholder.typicode.com/users')
+        const users = await $fetch('/api/users')
         commit('setUsers', users)
       } catch (err) {
         console.error('Error: ', err)
