@@ -47,16 +47,15 @@ async function loadingPosts() {
   })
 }
 
-function changePage (numberPage) {
+async function changePage (numberPage) {
   currentPage.value = numberPage
-  console.log(currentPage.value)
-  loadingPosts()
+  await loadingPosts()
 }
 
-function seletcedUser (userId) {
+async function seletcedUser (userId) {
   currentUserId.value = userId
   currentPage.value = 1
-  loadingPosts()
+  await loadingPosts()
 }
 
 onMounted(async () => {

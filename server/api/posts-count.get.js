@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
 
   let total = 100
   if (userId) {
-    total = 0
+    total = 10
   } 
 
   try {

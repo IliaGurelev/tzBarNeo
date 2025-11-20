@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <p><b>User ID:</b> {{ post.userId }}</p>
-    <p><b>Post ID:</b> {{ post.id }}</p>
+  <main class="main">
+    <p class="info"><b>User ID:</b> {{ post.userId }}</p>
+    <p class="info"><b>Post ID:</b> {{ post.id }}</p>
     <div v-if="!isEdit" class="wrap">
-      <p><b>Post Title:</b> {{ post.title }}</p>
-      <p><b>Post Body</b> {{ post.body }}</p>
-      <button @click="changeIsEdit(true)">Редактировать</button>
+      <p class="info"><b>Post Title:</b> {{ post.title }}</p>
+      <p class="info"><b>Post Body</b> {{ post.body }}</p>
+      <button @click="changeIsEdit(true)" class="btn">Редактировать</button>
     </div>
     <form v-else @submit.prevent="updatePost" class="form-edit">
       <div class="wrap-input">
@@ -16,11 +16,13 @@
         <label for="post-body">Post Body</label>
         <input type="text" id="post-body" v-model="body">
       </div>
-      <button @click="changeIsEdit(false)">Отмена</button>
-      <input type="submit" value="Сохранить">
+      <div class="btn-wrap">
+        <button @click="changeIsEdit(false)" class="btn">Отмена</button>
+        <input type="submit" value="Сохранить" class="btn">
+      </div>
     </form>
     
-  </div>
+  </main>
 </template>
 
 <script setup>
@@ -39,22 +41,63 @@
   }
 
   async function updatePost() {
-    const response = await $fetch(`https://jsonplaceholder.typicode.com/posts/${post_id}`, {
+    const response = await $fetch(`/api/posts/${post_id}`, {
       method: 'PATCH',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify({title: title.value, body: body.value})
+      body: {
+        title: title.value,
+        body: body.value
+      }
     })
     
-    const data = await response.json()
+    const data = response
     post.value = data
-    console.log(data)
 
     changeIsEdit(false)
   }
 </script>
 
 <style lang="scss" scoped>
+.main {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  font-size: 24px;
+}
 
+.info {
+  padding: 12px;
+  border-bottom: 1px solid #d3d3d3;
+}
+
+.wrap-input {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  gap: 12px;
+
+  label {
+    font-weight: bold;
+  }
+
+  input {
+    border: 1px solid #2aa9fd;
+    padding: 6px;
+    border-radius: 6px;
+    width: 80%;
+  }
+}
+
+.btn {
+  color: #ffffff;
+  background-color: #2aa9fd;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.btn-wrap {
+  display: flex;
+  gap: 12px;
+}
 </style>
