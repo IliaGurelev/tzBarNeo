@@ -1,5 +1,6 @@
 <template>
-  <main class="main">
+  <Loader v-if="isLoading" class="loading" />
+  <main class="main" v-else="">
     <p class="info"><b>User ID:</b> {{ post.userId }}</p>
     <p class="info"><b>Post ID:</b> {{ post.id }}</p>
     <div v-if="!isEdit" class="wrap">
@@ -27,21 +28,20 @@
 
 <script setup>
   const {post_id} = useRoute().params
-
-  const isEdit = ref(false)
-
-  const { data } = await useFetch(`/api/posts/${post_id}`)
+  
+  const { data, pending: isLoading } = await useFetch(`/api/posts/${post_id}`)
   const post = ref(data)
-
   const title = ref(post.value.title)
   const body = ref(post.value.body)
+
+  const isEdit = ref(false)
 
   function changeIsEdit(newValue) {
     isEdit.value = newValue
   }
 
   async function updatePost() {
-    const response = await $fetch(`/api/posts/${post_id}`, {
+    const data = await $fetch(`/api/posts/${post_id}`, {
       method: 'PATCH',
       body: {
         title: title.value,
@@ -49,7 +49,6 @@
       }
     })
     
-    const data = response
     post.value = data
 
     changeIsEdit(false)
@@ -90,9 +89,10 @@
 }
 
 .btn {
+  padding: 12px;
+  margin-top: 12px;
   color: #ffffff;
   background-color: #2aa9fd;
-  padding: 12px;
   border-radius: 12px;
 }
 
